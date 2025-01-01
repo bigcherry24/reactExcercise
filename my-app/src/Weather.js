@@ -9,11 +9,11 @@ const Weather = () => {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const response = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
+        const response = await axios.get('https://api.open-meteo.com/v1/forecast', {
           params: {
-            q: 'Seoul',
-            appid: 'YOUR_API_KEY',
-            units: 'metric'
+            latitude: '37.566',
+            longitude: '126.9784',
+            current: 'temperature_2m'
           }
         });
         setWeather(response.data);
@@ -37,9 +37,9 @@ const Weather = () => {
 
   return (
     <div>
-      <h1>Weather in {weather.name}</h1>
-      <p>Temperature: {weather.main.temp}°C</p>
-      <p>Condition: {weather.weather[0].description}</p>
+      <h1>Weather in {weather.latitude}, {weather.longitude}</h1>
+      <p>Temperature: {weather.current.temperature_2m}°C</p>
+      <p>Condition: {weather.timezone}</p>
     </div>
   );
 };
