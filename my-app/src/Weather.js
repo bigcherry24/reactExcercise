@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const Weather = () => {
-  const [latitude, setLatitude] = useState('37.566');
-  const [longitude, setLongitude] = useState('126.9784');
+const Weather = ({ initialLatitude, initialLongitude }) => {
+  const [latitude, setLatitude] = useState(initialLatitude);
+  const [longitude, setLongitude] = useState(initialLongitude);
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -31,6 +31,10 @@ const Weather = () => {
     e.preventDefault();
     fetchWeather();
   };
+
+  useEffect(() => {
+    fetchWeather();
+  }, [latitude, longitude]);
 
   return (
     <div>

@@ -19,7 +19,7 @@ function App() {
         >
           Learn React
         </a>
-        <Weather />
+        <Weather initialLatitude="37.566" initialLongitude="126.9784" />
       </header>
     </div>
   );
