@@ -7,6 +7,7 @@ const Weather = ({ initialLatitude, initialLongitude }) => {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [validationError, setValidationError] = useState(null);
 
   const fetchWeather = async () => {
     setLoading(true);
@@ -29,6 +30,11 @@ const Weather = ({ initialLatitude, initialLongitude }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!latitude || !longitude) {
+      setValidationError('Latitude and Longitude cannot be empty.');
+      return;
+    }
+    setValidationError(null);
     fetchWeather();
   };
 
@@ -62,6 +68,7 @@ const Weather = ({ initialLatitude, initialLongitude }) => {
         <button type="submit">Get Weather</button>
       </form>
 
+      {validationError && <div style={{ color: 'red' }}>{validationError}</div>}
       {loading && <div>Loading...</div>}
       {error && <div>Error: {error.message}</div>}
       {weather && (
