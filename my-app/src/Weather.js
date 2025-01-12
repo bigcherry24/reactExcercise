@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
 const Weather = ({ initialLatitude, initialLongitude }) => {
@@ -9,17 +9,11 @@ const Weather = ({ initialLatitude, initialLongitude }) => {
   const [error, setError] = useState(null);
   const [validationError, setValidationError] = useState(null);
 
-  const fetchWeather = async () => {
+  const fetchWeather = async (params) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('https://api.open-meteo.com/v1/forecast', {
-        params: {
-          latitude: latitude,
-          longitude: longitude,
-          current: 'temperature_2m'
-        }
-      });
+      const response = await axios.get('https://api.open-meteo.com/v1/forecast', { params });
       setWeather(response.data);
       setLoading(false);
     } catch (error) {
@@ -28,6 +22,12 @@ const Weather = ({ initialLatitude, initialLongitude }) => {
     }
   };
 
+  const memoizedParams = useMemo(() => ({
+    latitude: latitude,
+    longitude: longitude,
+    current: 'temperature_2m'
+  }), [latitude, longitude]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!latitude || !longitude) {
@@ -35,12 +35,12 @@ const Weather = ({ initialLatitude, initialLongitude }) => {
       return;
     }
     setValidationError(null);
-    fetchWeather();
+    fetchWeather(memoizedParams);
   };
 
   useEffect(() => {
-    fetchWeather();
-  }, [latitude, longitude]);
+    fetchWeather(memoizedParams);
+  }, [memoizedParams]);
 
   return (
     <div>
